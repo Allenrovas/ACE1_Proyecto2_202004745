@@ -17,7 +17,38 @@ include macro.asm
 	msg8 db 10,13,7,"7. Encontrar los ceros de la funcion por medio del metodo de Steffensen.","$"
 	msg9 db 10,13,7,"8. Salir","$"
 	salto db 10,13,"$"
-	error db 10,13,7,"Opcion no valida, intente de nuevo","$"
+	error db 10,13,7,"Error: Opcion no valida, intente de nuevo","$"
+	errorEntero db 10,13,7,"Error: Ingrese un valor entero, intente de nuevo","$"
+
+;titulos de los submenus
+	menuIngresar db 10,13,7,"--Menu Ingresar Ecuacion--","$"
+	menuImprimirFuncion db 10,13,7,"--Menu Imprimir Funcion--","$"
+	menuImprimirDerivada db 10,13,7,"--Menu Imprimir Derivada--","$"
+	menuImprimirIntegral db 10,13,7,"--Menu Imprimir Integral--","$"
+	menuGraficar db 10,13,7,"--Menu Graficar--","$"
+	menuCerosNewton db 10,13,7,"--Menu Ceros Newton--","$"
+	menuCerosSteffensen db 10,13,7,"--Menu Ceros Steffensen--","$"
+	adios db 10,13,7,"Adios, tenga un buen dia.","$"
+
+;ingresarFuncion
+	stringQuinta db 10,13,7,"Ingrese el coeficiente de grado 5: ","$"
+	stringCuarta db 10,13,7,"Ingrese el coeficiente de grado 4: ","$"
+	stringTercera db 10,13,7,"Ingrese el coeficiente de grado 3: ","$"
+	stringSegunda db 10,13,7,"Ingrese el coeficiente de grado 2: ","$"
+	stringPrimera db 10,13,7,"Ingrese el coeficiente de grado 1: ","$"
+	stringConstante db 10,13,7,"Ingrese el coeficiente de grado 0: ","$"
+
+;variables coef
+	coef5 db 5 dup('$')
+	coef4 db 5 dup('$')
+	coef3 db 5 dup('$')
+	coef2 db 5 dup('$')
+	coef1 db 5 dup('$')
+	coef0 db 5 dup('$')
+
+	numero db 2 dup(0)
+
+
 
 
 
@@ -32,6 +63,7 @@ include macro.asm
     	MOV ds, ax
 		xor ax,ax
 		
+		limpiarPantalla ;limpia la pantalla
 		imprimir encabezado ;imprime el encabezado del programa
 
         menuPrincipal: ;etiqueta menu principal
@@ -63,43 +95,60 @@ include macro.asm
 			je cerosSteffensen ;si es 7, ingresa a la funcion cerosSteffensen
 			cmp al,'8' ;compara la opcion con 8
 			je salir ;si es 8, ingresa a la funcion salir
+			limpiarPantalla ;limpia la pantalla
 			imprimir error ;si no es ninguna de las anteriores, imprime error
+			imprimir salto ;imprime salto de linea
 			jmp menuPrincipal ;si no es ninguna de las anteriores, vuelve al menu principal
 		ingresarEcuacion:
 			;ingresa a la funcion ingresarEcuacion
-			imprimir msg2
+			limpiarPantalla ;limpia la pantalla
+			imprimir menuIngresar
+			imprimir salto
+			obtenerCoeficientes ;obtiene los coeficientes de la ecuacion
 			jmp menuPrincipal ;vuelve al menu principal
 		imprimirFuncion:
 			;ingresa a la funcion imprimirFuncion
-			imprimir msg3
+			limpiarPantalla ;limpia la pantalla
+			imprimir menuImprimirFuncion
+			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		imprimirDerivada:
 			;ingresa a la funcion imprimirDerivada
-			imprimir msg4
+			limpiarPantalla ;limpia la pantalla
+			imprimir menuImprimirDerivada
+			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		imprimirIntegral:
 			;ingresa a la funcion imprimirIntegral
-			imprimir msg5
+			limpiarPantalla ;limpia la pantalla
+			imprimir menuImprimirIntegral
+			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		graficar:
 			;ingresa a la funcion graficar
-			imprimir msg6
+			limpiarPantalla ;limpia la pantalla
+			imprimir menuGraficar
+			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		cerosNewton:
 			;ingresa a la funcion cerosNewton
-			imprimir msg7
+			limpiarPantalla ;limpia la pantalla
+			imprimir menuCerosNewton
+			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		cerosSteffensen:
 			;ingresa a la funcion cerosSteffensen
-			imprimir msg8
+			limpiarPantalla ;limpia la pantalla
+			imprimir menuCerosSteffensen
+			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		salir:
+			limpiarPantalla ;limpia la pantalla
+			imprimir adios ;imprime adios
+			imprimir salto ;imprime salto de linea
 			mov ah, 4ch
         	int 21h
 		
 
 	main ENDP 
-
-
-
 end main
