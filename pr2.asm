@@ -19,6 +19,7 @@ include macro.asm
 	salto db 10,13,"$"
 	error db 10,13,7,"Error: Opcion no valida, intente de nuevo","$"
 	errorEntero db 10,13,7,"Error: Ingrese un valor entero, intente de nuevo","$"
+	memoriaVacia db 10,13,7,"Error: No hay ninguna funcion almacenada, intente de nuevo","$"
 
 ;titulos de los submenus
 	menuIngresar db 10,13,7,"--Menu Ingresar Ecuacion--","$"
@@ -31,14 +32,33 @@ include macro.asm
 	adios db 10,13,7,"Adios, tenga un buen dia.","$"
 
 ;ingresarFuncion
-	stringQuinta db 10,13,7,"Ingrese el coeficiente de grado 5: ","$"
-	stringCuarta db 10,13,7,"Ingrese el coeficiente de grado 4: ","$"
-	stringTercera db 10,13,7,"Ingrese el coeficiente de grado 3: ","$"
-	stringSegunda db 10,13,7,"Ingrese el coeficiente de grado 2: ","$"
-	stringPrimera db 10,13,7,"Ingrese el coeficiente de grado 1: ","$"
-	stringConstante db 10,13,7,"Ingrese el coeficiente de grado 0: ","$"
+	stringQuinta db 10,13,7,"Ingrese el coeficiente de grado 5 (x^5): ","$"
+	stringCuarta db 10,13,7,"Ingrese el coeficiente de grado 4 (x^4): ","$"
+	stringTercera db 10,13,7,"Ingrese el coeficiente de grado 3 (x^3): ","$"
+	stringSegunda db 10,13,7,"Ingrese el coeficiente de grado 2 (x^2): ","$"
+	stringPrimera db 10,13,7,"Ingrese el coeficiente de grado 1 (x^1): ","$"
+	stringConstante db 10,13,7,"Ingrese el coeficiente de grado 0 (Constante): ","$"
 
-;variables coef
+;variables varias
+stringDerivaFuncion db 10,13,7,"--Derivada de la funcion--","$"
+stringIntegralFuncion db 10,13,7,"--Integral de la funcion--","$"
+funcionOriginalString db 10,13,7,"f(x) =","$"
+derivadaString db 10,13,7,"f'(x) =","$"
+integralString db 10,13,7,"F(x) =","$"
+menos db "-","$"
+mas db "+","$"
+multiplicacion db "*","$"
+division db "/","$"
+x5 db "x^5","$"
+x4 db "x^4","$"
+x3 db "x^3","$"
+x2 db "x^2","$"
+x db "x","$"
+espacio db " ","$"
+constanteIntegracion db " + C","$"
+auxiliar        db 3 dup ('0'),'$'
+
+;variables coeficientes de la funcion principal, deriva e integral
 	coef5 db 5 dup('$')
 	coef4 db 5 dup('$')
 	coef3 db 5 dup('$')
@@ -46,7 +66,22 @@ include macro.asm
 	coef1 db 5 dup('$')
 	coef0 db 5 dup('$')
 
+	coefDerivada4 db 5 dup('$')
+	coefDerivada3 db 5 dup('$')
+	coefDerivada2 db 5 dup('$')
+	coefDerivada1 db 5 dup('$')
+	coefDerivada0 db 5 dup('$')
+
+	coefIntegral6 db 5 dup('$')
+	coefIntegral5 db 5 dup('$')
+	coefIntegral4 db 5 dup('$')
+	coefIntegral3 db 5 dup('$')
+	coefIntegral2 db 5 dup('$')
+	coefIntegral1 db 5 dup('$')
+
 	numero db 2 dup(0)
+
+
 
 
 
@@ -95,7 +130,7 @@ include macro.asm
 			je cerosSteffensen ;si es 7, ingresa a la funcion cerosSteffensen
 			cmp al,'8' ;compara la opcion con 8
 			je salir ;si es 8, ingresa a la funcion salir
-			limpiarPantalla ;limpia la pantalla
+			;limpiarPantalla ;limpia la pantalla
 			imprimir error ;si no es ninguna de las anteriores, imprime error
 			imprimir salto ;imprime salto de linea
 			jmp menuPrincipal ;si no es ninguna de las anteriores, vuelve al menu principal
@@ -104,20 +139,77 @@ include macro.asm
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuIngresar
 			imprimir salto
-			obtenerCoeficientes ;obtiene los coeficientes de la ecuacion
+			ingresoFuncionOriginal ;obtiene los coeficientes de la ecuacion
 			jmp menuPrincipal ;vuelve al menu principal
 		imprimirFuncion:
 			;ingresa a la funcion imprimirFuncion
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuImprimirFuncion
 			imprimir salto
-			jmp menuPrincipal ;vuelve al menu principal
+			cmp coef5 [1],'$' ;compara el primer digito del coeficiente 5 con 0
+			je FF4 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlena; si no es 0, ingresa a la funcion mmLlena
+			FF4:
+			cmp coef4 [1],'$' ;compara el primer digito del coeficiente 4 con 0
+			je FF3 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlena; si no es 0, ingresa a la funcion mmLlena
+			FF3:
+			cmp coef3 [1],'$' ;compara el primer digito del coeficiente 3 con 0
+			je FF2 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlena; si no es 0, ingresa a la funcion mmLlena
+			FF2:
+			cmp coef2 [1],'$' ;compara el primer digito del coeficiente 2 con 0
+			je FF1 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlena; si no es 0, ingresa a la funcion mmLlena
+			FF1:
+			cmp coef1 [1],'$' ;compara el primer digito del coeficiente 1 con 0
+			je mmVacia ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlena; si no es 0, ingresa a la funcion mmLlena
+			
+			mmLlena:
+				funcionMemoria ;imprime la funcion en memoria
+				jmp menuPrincipal ;vuelve al menu principal
+			mmVacia:
+				imprimir memoriaVacia ;si es 0, imprime memoria vacia
+				imprimir salto
+				jmp menuPrincipal ;vuelve al menu principal
+
 		imprimirDerivada:
 			;ingresa a la funcion imprimirDerivada
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuImprimirDerivada
 			imprimir salto
-			jmp menuPrincipal ;vuelve al menu principal
+			
+			cmp coef5 [1],'$' ;compara el primer digito del coeficiente 5 con 0
+			je FD4 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaD; si no es 0, ingresa a la funcion mmLlena
+			FD4:
+			cmp coef4 [1],'$' ;compara el primer digito del coeficiente 4 con 0
+			je FD3 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaD; si no es 0, ingresa a la funcion mmLlena
+			FD3:
+			cmp coef3 [1],'$' ;compara el primer digito del coeficiente 3 con 0
+			je FD2 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaD; si no es 0, ingresa a la funcion mmLlena
+			FD2:
+			cmp coef2 [1],'$' ;compara el primer digito del coeficiente 2 con 0
+			je FD1 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaD; si no es 0, ingresa a la funcion mmLlena
+			FD1:
+			cmp coef1 [1],'$' ;compara el primer digito del coeficiente 1 con 0
+			je mmVaciaD ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaD; si no es 0, ingresa a la funcion mmLlena
+			
+			mmLlenaD:
+				funcionDerivada ;imprime la funcion en memoria
+				imprimir salto;imprime salto de linea
+				jmp menuPrincipal ;vuelve al menu principal
+			mmVaciaD:
+				imprimir memoriaVacia ;si es 0, imprime memoria vacia
+				imprimir salto
+				jmp menuPrincipal ;vuelve al menu principal
+
+
 		imprimirIntegral:
 			;ingresa a la funcion imprimirIntegral
 			limpiarPantalla ;limpia la pantalla
@@ -148,6 +240,16 @@ include macro.asm
 			imprimir salto ;imprime salto de linea
 			mov ah, 4ch
         	int 21h
+		errorEntradaFuncion:
+			limpiarPantalla ;limpia la pantalla
+			imprimir errorEntero
+			LimpiarVariables coef5, SIZEOF coef5, 24h
+			LimpiarVariables coef4, SIZEOF coef4, 24h
+			LimpiarVariables coef3, SIZEOF coef3, 24h
+			LimpiarVariables coef2, SIZEOF coef2, 24h
+			LimpiarVariables coef1, SIZEOF coef1, 24h
+			LimpiarVariables coef0, SIZEOF coef0, 24h
+			jmp menuPrincipal
 		
 
 	main ENDP 
