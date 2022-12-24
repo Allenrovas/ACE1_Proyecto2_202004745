@@ -49,6 +49,12 @@ menos db "-","$"
 mas db "+","$"
 multiplicacion db "*","$"
 division db "/","$"
+seis db "6","$"
+cinco db "5","$"
+cuatro db "4","$"
+tres db "3","$"
+dos db "2","$"
+x6 db "x^6","$"
 x5 db "x^5","$"
 x4 db "x^4","$"
 x3 db "x^3","$"
@@ -80,14 +86,6 @@ auxiliar        db 3 dup ('0'),'$'
 	coefIntegral1 db 5 dup('$')
 
 	numero db 2 dup(0)
-
-
-
-
-
-
-
-
 .code
 
     ; procedimiento principal main
@@ -215,13 +213,47 @@ auxiliar        db 3 dup ('0'),'$'
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuImprimirIntegral
 			imprimir salto
-			jmp menuPrincipal ;vuelve al menu principal
+			
+			cmp coef5 [1],'$' ;compara el primer digito del coeficiente 5 con 0
+			je FI4 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaI; si no es 0, ingresa a la funcion mmLlena
+			FI4:
+			cmp coef4 [1],'$' ;compara el primer digito del coeficiente 4 con 0
+			je FI3 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaI; si no es 0, ingresa a la funcion mmLlena
+			FI3:
+			cmp coef3 [1],'$' ;compara el primer digito del coeficiente 3 con 0
+			je FI2 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaI; si no es 0, ingresa a la funcion mmLlena
+			FI2:
+			cmp coef2 [1],'$' ;compara el primer digito del coeficiente 2 con 0
+			je FI1 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaI; si no es 0, ingresa a la funcion mmLlena
+			FI1:
+			cmp coef1 [1],'$' ;compara el primer digito del coeficiente 1 con 0
+			je mmVaciaI ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaI; si no es 0, ingresa a la funcion mmLlena
+			
+			mmLlenaI:
+				funcionIntegral ;imprime la funcion en memoria
+				imprimir salto;imprime salto de linea
+				jmp menuPrincipal ;vuelve al menu principal
+			mmVaciaI:
+				imprimir memoriaVacia ;si es 0, imprime memoria vacia
+				imprimir salto
+				jmp menuPrincipal ;vuelve al menu principal
+
+
 		graficar:
 			;ingresa a la funcion graficar
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuGraficar
 			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
+			
+
+
+
 		cerosNewton:
 			;ingresa a la funcion cerosNewton
 			limpiarPantalla ;limpia la pantalla

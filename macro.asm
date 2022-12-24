@@ -163,6 +163,54 @@ LOCAL D5,D4,D3,D2,D1,F
         imprimir salto
 endm
 
+funcionIntegral macro
+    LOCAL I6,I5,I4,I3,I2,I1,I0,F
+    imprimir funcionOriginalString
+    cmp coef5 [1],0
+    je I5
+    getEntero coef5
+    imprimir division
+    imprimir seis
+    imprimir x6
+    jmp I5
+    I5:
+        cmp coef4 [1],0
+        je I4
+        getEntero coef4
+        imprimir division
+        imprimir cinco
+        imprimir x5
+    I4:
+        cmp coef3 [1],0
+        je I3
+        getEntero coef3
+        imprimir division
+        imprimir cuatro
+        imprimir x4
+    I3:
+        cmp coef2 [1],0
+        je I2
+        getEntero coef2
+        imprimir division
+        imprimir tres
+        imprimir x3
+    I2:
+        cmp coef1 [1],0
+        je I1
+        getEntero coef1
+        imprimir division
+        imprimir dos
+        imprimir x2
+    I1:
+        cmp coef0 [1],0
+        je I0
+        getEntero coef0
+        imprimir x
+    I0:
+        imprimir constanteIntegracion
+endm
+
+
 validarEntrada macro coeficiente
     validarLengthCoeficiente coeficiente
     validarCoefR coeficiente
