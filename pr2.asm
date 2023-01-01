@@ -63,6 +63,15 @@ x db "x","$"
 espacio db " ","$"
 constanteIntegracion db " + C","$"
 auxiliar        db 3 dup ('0'),'$'
+;variables menu graficar
+stringFuncion db "1. Funcion Original","$"
+stringDerivada db "2. Derivada","$"
+stringIntegral db "3. Integral","$"
+stringSalir db "4. Salir","$"
+stringInicio db "Ingrese el valor inicial del intervalo: ","$"
+stringFinal db "Ingrese el valor final del intervalo: ","$"
+inicio db 5 dup('$')
+final db 5 dup('$')
 
 ;variables coeficientes de la funcion principal, deriva e integral
 	coef5 db 5 dup('$')
@@ -249,7 +258,57 @@ auxiliar        db 3 dup ('0'),'$'
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuGraficar
 			imprimir salto
-			jmp menuPrincipal ;vuelve al menu principal
+
+			imprimir salto
+			
+			cmp coef5 [1],'$' ;compara el primer digito del coeficiente 5 con 0
+			je G4 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaG; si no es 0, ingresa a la funcion mmLlena
+			G4:
+			cmp coef4 [1],'$' ;compara el primer digito del coeficiente 4 con 0
+			je G3 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaG; si no es 0, ingresa a la funcion mmLlena
+			G3:
+			cmp coef3 [1],'$' ;compara el primer digito del coeficiente 3 con 0
+			je g2 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaG; si no es 0, ingresa a la funcion mmLlena
+			G2:
+			cmp coef2 [1],'$' ;compara el primer digito del coeficiente 2 con 0
+			je G1 ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaG; si no es 0, ingresa a la funcion mmLlena
+			G1:
+			cmp coef1 [1],'$' ;compara el primer digito del coeficiente 1 con 0
+			je mmVaciaG ;si es 0, ingresa a la funcion mmVacia
+			jmp mmLlenaG; si no es 0, ingresa a la funcion mmLlena
+
+			mmLlenaG:
+				imprimir salto; imprime salto de linea
+				imprimir stringFuncion ;imprime la string funcion en memoria
+				funcionMemoria ;imprime la funcion en memoria
+				imprimir salto; imprime salto de linea
+				imprimir stringDerivada ;imprime la string derivada en memoria
+				funcionDerivada ;imprime la funcion en memoria
+				imprimir salto; imprime salto de linea
+				imprimir stringIntegral ;imprime la string integral en memoria
+				funcionIntegral ;imprime la funcion en memoria
+				imprimir salto; imprime salto de linea
+				imprimir stringSalir ;imprime la string salir en memoria
+				imprimir salto;imprime salto de linea
+				obtenerOpcion ;obtiene la opcion del usuario
+				cmp al, '1'
+				je graficaFuncion
+				cmp al, '2'
+				je graficaDerivada
+				cmp al, '3'
+				je graficaIntegral
+				cmp al, '4'
+				je menuPrincipal
+				imprimir error
+				jmp graficar
+			mmVaciaG:
+				imprimir memoriaVacia ;si es 0, imprime memoria vacia
+				imprimir salto
+				jmp menuPrincipal ;vuelve al menu principal
 			
 
 
@@ -282,7 +341,24 @@ auxiliar        db 3 dup ('0'),'$'
 			LimpiarVariables coef1, SIZEOF coef1, 24h
 			LimpiarVariables coef0, SIZEOF coef0, 24h
 			jmp menuPrincipal
-		
+		graficaFuncion:
+			limpiarPantalla ;limpia la pantalla
+			obtenerRangoGrafico
+			graficarFuncionOriginal
+			imprimir salto
+			jmp graficar 
+		graficaDerivada:
+			limpiarPantalla ;limpia la pantalla
+			obtenerRangoGrafico
+			graficarDerivada
+			imprimir salto
+			jmp graficar
+		graficaIntegral:
+			limpiarPantalla ;limpia la pantalla
+			obtenerRangoGrafico
+			graficarIntegral
+			imprimir salto
+			jmp graficar
 
 	main ENDP 
 end main
