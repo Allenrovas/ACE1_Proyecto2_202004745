@@ -72,6 +72,17 @@ stringInicio db "Ingrese el valor inicial del intervalo: ","$"
 stringFinal db "Ingrese el valor final del intervalo: ","$"
 inicio db 5 dup('$')
 final db 5 dup('$')
+;variables Newton y Steffensen
+stringIteraciones db "Ingrese el numero de iteraciones: ","$"
+stringToleranciaC db "Ingrese el coeficiente de tolerancia: ","$"
+stringLimiteSup db "Ingrese el limite superior: ","$"
+stringLimiteInf db "Ingrese el limite inferior: ","$"
+stringTolerancia db "Seleccione el grado de la tolerancia (Ingrese un valor entero positivo):","$"
+iteraciones db 5 dup('$')
+toleranciaC db 5 dup('$')
+limiteSup db 5 dup('$')
+limiteInf db 5 dup('$')
+tolerancia db 5 dup('$')
 
 ;variables coeficientes de la funcion principal, deriva e integral
 	coef5 db 5 dup('$')
@@ -318,11 +329,33 @@ final db 5 dup('$')
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuCerosNewton
 			imprimir salto
+			imprimir stringIteraciones ;imprime la string iteraciones en memoria
+			leer iteraciones ;lee las iteraciones
+			imprimir stringToleranciaC
+			leer toleranciaC
+			imprimir stringLimiteSup
+			leer limiteSup
+			imprimir stringLimiteInf
+			leer limiteInf
+			imprimir stringTolerancia
+			leer tolerancia
+			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		cerosSteffensen:
 			;ingresa a la funcion cerosSteffensen
 			limpiarPantalla ;limpia la pantalla
 			imprimir menuCerosSteffensen
+			imprimir salto
+			imprimir stringIteraciones ;imprime la string iteraciones en memoria
+			leer iteraciones ;lee las iteraciones
+			imprimir stringToleranciaC
+			leer toleranciaC
+			imprimir stringLimiteSup
+			leer limiteSup
+			imprimir stringLimiteInf
+			leer limiteInf
+			imprimir stringTolerancia
+			leer tolerancia
 			imprimir salto
 			jmp menuPrincipal ;vuelve al menu principal
 		salir:
